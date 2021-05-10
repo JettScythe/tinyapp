@@ -49,7 +49,7 @@ app.get("/hello", (req, res) => {
 app.post("/urls", (req, res) => {
   let randomStr = genRandomString();
   urlDatabase[randomStr] = req.body.longURL;
-  res.send("OK");
+  res.redirect(`urls/${randomStr}`);
 });
 
 app.listen(PORT, () => {
