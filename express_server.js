@@ -1,13 +1,23 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const crypto = require('crypto');
 const app = express();
 const PORT = 3000; // default port 3000
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+
+const genRandomString = () => {
+  let randomString = crypto.randomBytes(6).toString('utf-8');
+}
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
+
+// GETS
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -32,6 +42,13 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+
+// POSTS
+app.post("/urls", (req, res) => {
+  console.log(req.body);  // Log the POST request body to the console
+  res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
 app.listen(PORT, () => {
