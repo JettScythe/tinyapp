@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const genRandomString = () => {
-  let randomString = crypto.randomBytes(6).toString('utf-8');
+  return randomString = crypto.randomBytes(3).toString('hex');
 }
 
 const urlDatabase = {
@@ -48,7 +48,7 @@ app.get("/hello", (req, res) => {
 // POSTS
 app.post("/urls", (req, res) => {
   console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  res.send(genRandomString());         
 });
 
 app.listen(PORT, () => {
