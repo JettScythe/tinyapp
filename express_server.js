@@ -1,9 +1,11 @@
 const express = require("express");
 const crypto = require('crypto');
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 3000; // default port 3000
 
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 app.set("view engine", "ejs");
 
 const genRandomString = () => {
@@ -72,6 +74,13 @@ app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.newURL;
   res.redirect("../../urls")
 });
+
+// Login
+app.post("/login", (req, res) => {
+  let username = req.body.username;
+  res.cookie("username", username);
+  res.redirect("urls")
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
