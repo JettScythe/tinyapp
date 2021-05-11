@@ -1,10 +1,9 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const crypto = require('crypto');
 const app = express();
 const PORT = 3000; // default port 3000
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const genRandomString = () => {
@@ -55,6 +54,11 @@ app.post("/urls", (req, res) => {
   let randomStr = genRandomString();
   urlDatabase[randomStr] = req.body.longURL;
   res.redirect(`urls/${randomStr}`);
+});
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls_index");
 });
 
 app.listen(PORT, () => {
