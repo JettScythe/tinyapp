@@ -12,6 +12,8 @@ const genRandomString = () => {
   return randomString = crypto.randomBytes(3).toString('hex');
 }
 
+const users = {};
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -22,6 +24,14 @@ const urlDatabase = {
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
+// Page to register new user
+app.get("/register", (req, res) => {
+  const templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render("user_reg", templateVars);
+})
 
 // Page to create new URL
 app.get("/urls/new", (req, res) => {
@@ -35,6 +45,7 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
+    user_id: req.cookies["user_id"],
     urls: urlDatabase
   }
   res.render("urls_index", templateVars);
@@ -67,9 +78,18 @@ app.get("/hello", (req, res) => {
 
 
 // POSTS
+// Register new users to DB
+app.post("/register", (req, res) => {
+  const randID = genRandomString();
+  users[randID] = {id: randID, email: req.body.email, password: req.body.password}
+  res.cookie("user_id", users[randID].id)
+  console.log(users)
+  res.redirect("urls");
+})
+
 // Create & add new URL to DB
 app.post("/urls", (req, res) => {
-  let randomStr = genRandomString();
+  const randomStr = genRandomString();
   urlDatabase[randomStr] = req.body.longURL;
   res.redirect(`urls/${randomStr}`);
 });
