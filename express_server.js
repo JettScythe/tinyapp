@@ -25,6 +25,13 @@ const fetchUser = (userID) => {
   return undefined;
 };
 
+const emailLookup = () => {
+  const emailArr = [];
+  for (const user_id in users) {
+    emailArr.push(users[user_id].email)
+  }
+  return emailArr;
+}
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -90,8 +97,18 @@ app.get("/hello", (req, res) => {
 // POSTS
 // Register new users to DB
 app.post("/register", (req, res) => {
+  const emailArr = emailLookup();
   const randID = genRandomString();
+  if (!req.body.email || !req.body.password) {
+    return res.sendStatus(400)
+  }
+  for (email of emailArr) {
+    if (email === req.body.email) {
+      return res.sendStatus(400);
+    };
+  };
   users[randID] = {id: randID, email: req.body.email, password: req.body.password}
+  res.cookie('email', users[randID].email)
   res.cookie("user_id", users[randID].id)
   console.log(users)
   res.redirect("urls");
