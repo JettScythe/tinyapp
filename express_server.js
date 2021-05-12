@@ -61,6 +61,9 @@ app.get("/login", (req, res) => {
 
 // Page to create new URL
 app.get("/urls/new", (req, res) => {
+  if (!req.cookies["user_id"]) {
+    res.redirect("/login")
+  }
   const templateVars = {
     user: fetchUser(req.cookies["user_id"]),
   }
