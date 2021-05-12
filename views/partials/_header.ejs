@@ -17,10 +17,8 @@
           <input type ="submit" class="btn btn-outline-dark" value="Logout">
         </form>
       <% } else { %>
-        <form class="form-inline" method="POST" action="/login">
-          <input class="form-group mx-sm-3" type="text" name="username">
-          <input type="submit" class="btn btn-outline-dark" value="Login">
-        </form>
+        <a href="/login" class="btn btn-outline-dark">login</a>
+        <a href="/register" class="btn btn-outline-dark">register</a>
       <% } %>
     </div>
   </nav>

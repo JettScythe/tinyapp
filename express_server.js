@@ -38,7 +38,6 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
 // GETS
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -143,14 +142,23 @@ app.post("/urls/:shortURL", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  const user = fetchUser(req.cookies["user_id"])
-  res.cookie("user_id", user.id);
+  for (const user_id in users) {
+    if (users[user_id].email !== req.body.email) {
+      return res.sendStatus(403);
+    } 
+    if (users[user_id].password !== req.body.password) {
+      return res.sendStatus(403)
+    } else {
+      res.cookie("user_id", users[user_id].id)
+    }
+  }
   res.redirect("urls")
 })
 
 // Logout
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
+  res.clearCookie("email")
   res.redirect("urls");
 })
 
