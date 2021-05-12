@@ -14,6 +14,18 @@ const genRandomString = () => {
 
 const users = {};
 
+
+const fetchUser = (userID) => {
+  for (const user_id in users) {
+    if (userID === user_id) {
+      const user = users[user_id];
+      return user;
+    }
+  }
+  return undefined;
+};
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -28,7 +40,7 @@ app.get("/", (req, res) => {
 // Page to register new user
 app.get("/register", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"]
+    user: fetchUser(req.cookies["user_id"])
   }
   res.render("user_reg", templateVars);
 })
@@ -36,7 +48,7 @@ app.get("/register", (req, res) => {
 // Page to create new URL
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"]
+    user: fetchUser(req.cookies["user_id"]),
   }
   res.render("urls_new", templateVars);
 });
@@ -44,8 +56,7 @@ app.get("/urls/new", (req, res) => {
 // Show table of URLs
 app.get("/urls", (req, res) => {
   const templateVars = {
-    username: req.cookies["username"],
-    user_id: req.cookies["user_id"],
+    user: fetchUser(req.cookies["user_id"]),
     urls: urlDatabase
   }
   res.render("urls_index", templateVars);
@@ -54,7 +65,6 @@ app.get("/urls", (req, res) => {
 // Show info on URL
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { 
-    username: req.cookies["username"],
     shortURL: req.params.shortURL, 
     longURL: urlDatabase[req.params.shortURL] 
   };
@@ -108,14 +118,14 @@ app.post("/urls/:shortURL", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie("username", username);
+  const user = fetchUser(req.cookies["user_id"])
+  res.cookie("user_id", user.id);
   res.redirect("urls")
 })
 
 // Logout
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("urls");
 })
 
