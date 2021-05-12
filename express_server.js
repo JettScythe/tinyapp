@@ -14,7 +14,6 @@ const genRandomString = () => {
 
 const users = {};
 
-
 const fetchUser = (userID) => {
   for (const user_id in users) {
     if (userID === user_id) {
@@ -25,6 +24,7 @@ const fetchUser = (userID) => {
   return undefined;
 };
 
+
 const emailLookup = () => {
   const emailArr = [];
   for (const user_id in users) {
@@ -34,8 +34,8 @@ const emailLookup = () => {
 }
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 // GETS
@@ -63,11 +63,12 @@ app.get("/login", (req, res) => {
 app.get("/urls/new", (req, res) => {
   if (!req.cookies["user_id"]) {
     res.redirect("/login")
+  } else {
+    const templateVars = {
+      user: fetchUser(req.cookies["user_id"]),
+    }
+    res.render("urls_new", templateVars);
   }
-  const templateVars = {
-    user: fetchUser(req.cookies["user_id"]),
-  }
-  res.render("urls_new", templateVars);
 });
 
 // Show table of URLs
@@ -82,15 +83,16 @@ app.get("/urls", (req, res) => {
 // Show info on URL
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { 
+    user: fetchUser(req.cookies["user_id"]),
     shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL] 
+    longURL: urlDatabase[req.params.shortURL].longURL
   };
   res.render("urls_show", templateVars);
 });
 
 // Redirect to domain of URL
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
@@ -127,7 +129,7 @@ app.post("/register", (req, res) => {
 // Create & add new URL to DB
 app.post("/urls", (req, res) => {
   const randomStr = genRandomString();
-  urlDatabase[randomStr] = req.body.longURL;
+  urlDatabase[randomStr] = {longURL: req.body.longURL, userID: req.cookies["user_id"]};
   res.redirect(`urls/${randomStr}`);
 });
 
@@ -139,7 +141,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 // Update URL in DB
 app.post("/urls/:shortURL", (req, res) => {
-  urlDatabase[req.params.shortURL] = req.body.newURL;
+  urlDatabase[req.params.shortURL].longURL = req.body.newURL;
   res.redirect("../../urls")
 });
 
