@@ -52,6 +52,14 @@ app.get("/register", (req, res) => {
   res.render("user_reg", templateVars);
 })
 
+// Page to login
+app.get("/login", (req, res) => {
+  const templateVars = {
+    user: fetchUser(req.cookies["user_id"])
+  }
+  res.render("login", templateVars);
+})
+
 // Page to create new URL
 app.get("/urls/new", (req, res) => {
   const templateVars = {
