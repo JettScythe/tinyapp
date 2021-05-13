@@ -24,13 +24,13 @@ const addNewUser = (name, email, password, userDB) => {
 };
 
 const fetchUserByEmail = (email, userDB) => {
-  for (const user_id in userDB) {
-    if (email === userDB[user_id].email) {
-      const user = userDB[user_id];
+  for (const userId in userDB) {
+    if (email === userDB[userId].email) {
+      const user = userDB[userId];
       return user;
     }
   }
-}
+};
 
 const authenticateUser = (email, password, userDB) => {
   // retrieve the user with that email
@@ -48,13 +48,13 @@ const authenticateUser = (email, password, userDB) => {
 
 const urlsForUsers = (id, urlDB) => {
   const userURLS = {};
-  for (const user_id in urlDB) {
-    if (urlDB[user_id].userID === id) {
-      userURLS[user_id] = urlDB[user_id];
+  for (const url in urlDB) {
+    if (urlDB[url].userID === id) {
+      userURLS[url] = urlDB[url];
     }
   }
   return userURLS;
 };
 
 
-module.exports = { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUserByEmail }
+module.exports = { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUserByEmail };

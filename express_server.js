@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 const { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUserByEmail } = require('./helpers');
 const app = express();
 const PORT = 3000; // default port 3000
@@ -15,7 +15,7 @@ const userParser = (req, res, next) => {
   const user = users[userId];
   req.currentUser = user;
   next();
-}
+};
 
 app.use(userParser);
 app.set("view engine", "ejs");
@@ -29,7 +29,13 @@ const urlDatabase = {
 
 // GETS
 app.get("/", (req, res) => {
-  res.redirect("/urls");
+  const userId = req.session['user_id'];
+  const currentUser = users[userId];
+  if (!currentUser) {
+    res.redirect("/login");
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 // Page to register new user
