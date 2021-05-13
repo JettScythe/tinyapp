@@ -93,12 +93,16 @@ app.get("/urls", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const userId = req.session['user_id'];
   const currentUser = users[userId];
-  const templateVars = {
-    user: currentUser,
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL
-  };
-  res.render("urls_show", templateVars);
+  if (!urlDatabase[req.params.shortURL]) {
+    res.status(404).send('<html><meta http-equiv=refresh content=5;URL=/urls /><body><h1>The requested URL does not exist. Redirecting..</h1></body></html>')
+  } else {
+    const templateVars = {
+      user: currentUser,
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL
+    };
+    res.render("urls_show", templateVars);
+  }
 });
 
 // Redirect to domain of URL
@@ -172,7 +176,7 @@ app.post("/login", (req, res) => {
     res.redirect('/urls');
   } else {
     // otherwise we send an error message
-    res.status(401).send('Wrong credentials!');
+    res.status(401).send('<html><meta http-equiv=refresh content=5;URL=/login /></html>Invalid credentials!, redirecting back to login');
   }
 });
 
