@@ -23,9 +23,18 @@ const addNewUser = (name, email, password, userDB) => {
   return userId;
 };
 
-const authenticateUser = (email, password) => {
+const fetchUserByEmail = (email, userDB) => {
+  for (const user_id in userDB) {
+    if (email === userDB[user_id].email) {
+      const user = userDB[user_id];
+      return user;
+    }
+  }
+}
+
+const authenticateUser = (email, password, userDB) => {
   // retrieve the user with that email
-  const user = fetchUserByEmail(email);
+  const user = fetchUserByEmail(email, userDB);
 
   // if we got a user back and the passwords match then return the userObj
   if (user && bcrypt.compareSync(password, user.password)) {
@@ -48,23 +57,4 @@ const urlsForUsers = (id, urlDB) => {
 };
 
 
-const fetchUser = (userID, userDB) => {
-  for (const user_id in userDB) {
-    if (userID === user_id) {
-      const user = userDB[user_id];
-      return user;
-    }
-  }
-  return undefined;
-};
-
-const fetchUserByEmail = (email, userDB) => {
-  for (const user_id in userDB) {
-    if (email === userDB[user_id].email) {
-      const user = userDB[user_id];
-      return user;
-    }
-  }
-}
-
-module.exports = { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUser, fetchUserByEmail }
+module.exports = { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUserByEmail }
