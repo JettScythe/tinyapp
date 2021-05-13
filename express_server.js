@@ -119,6 +119,9 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const user = fetchUserByEmail(email, users);
+  if (!email || !password) {
+    res.status(400).send('<html><body><h1>Please supply an email and a password</h1></body></html>')
+  }
   if (!user) {
     const userId = addNewUser(name, email, password, users);
     //set the cookie
