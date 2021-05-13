@@ -14,6 +14,7 @@ const addNewUser = (name, email, password, userDB) => {
     id: userId,
     name,
     email,
+    //encrypts the new user's password with bcrypt
     password: bcrypt.hashSync(password, 10)
   };
   // Add the user Object into the usersDb

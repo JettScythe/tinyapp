@@ -9,9 +9,11 @@
   <title>TinyApp</title>
 </head>
 <body>
+  <!-- the site header -->
   <%- include('partials/_header') %>
   <main style="margin: 1em;">
     <h3>My URLs</h3>
+    <!-- a list (or table) of URLs the user has created -->
     <table class="table">
       <thead>
         <tr>
@@ -25,10 +27,14 @@
         
         <% for(let url in urls) { %>
           <tr>
+            <!-- a short URL -->
             <td><%= url %></td>
+            <!-- the short URL's matching long URL -->
             <td><%= urls[url].longURL %></td>
+            <!-- an edit button which makes a GET request to /urls/:id -->
             <td><a href="/urls/<%= url %>" class="btn btn-outline-primary">Edit</a></td>
             <td>
+              <!-- a delete button which makes a POST request to /urls/:id/delete -->
               <form method="POST" action="/urls/<%= url %>/delete">
                 <input type ="submit" class="btn btn-outline-danger" value="Delete">
               </form>

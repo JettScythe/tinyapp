@@ -7,18 +7,23 @@
 </head>
 
 <body>
+  <!-- the site header -->
   <%- include('partials/_header') %>
   <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
+        <!-- the corresponding long URL -->
         <h5 class="card-title">TinyURL for: <%= longURL %></h5>
+        <!-- the short URL (for the given ID) -->
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>        
       </div>
     <div class="card-footer text-muted">
       <form method="POST" action="/urls/<%= shortURL %>">
         <h3>Edit:</h3>
         <label for="nameURL">New URL:</label>
+        <!-- the corresponding long URL -->
         <input type="text" name="newURL" placeholder="<%= longURL %>" required>
+        <!-- an update button which makes a POST request to /urls/:id -->
         <input type ="submit" class="btn btn-primary" value="Submit">
       </form>
     </div>
