@@ -14,6 +14,17 @@ const genRandomString = () => {
 
 const users = {};
 
+const urlsForUsers = (id) => {
+  const userURLS = {};
+  for (const user_id in urlDatabase) {
+    if (urlDatabase[user_id].userID === id) {
+      userURLS[user_id] = urlDatabase[user_id];
+    }
+  }
+  return userURLS;
+}
+
+
 const fetchUser = (userID) => {
   for (const user_id in users) {
     if (userID === user_id) {
@@ -71,13 +82,21 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+
+
 // Show table of URLs
 app.get("/urls", (req, res) => {
-  const templateVars = {
-    user: fetchUser(req.cookies["user_id"]),
-    urls: urlDatabase
+  if (!req.cookies["user_id"]) {
+    res.redirect("/login")
+  } else {
+    console.log(fetchUser(req.cookies["user_id"]));
+    console.log(urlsForUsers(req.cookies["user_id"]))
+    const templateVars = {
+      user: fetchUser(req.cookies["user_id"]),
+      urls: urlsForUsers(req.cookies["user_id"])
+    }
+    res.render("urls_index", templateVars);
   }
-  res.render("urls_index", templateVars);
 })
 
 // Show info on URL
@@ -135,30 +154,35 @@ app.post("/urls", (req, res) => {
 
 // Delete URL from DB
 app.post("/urls/:shortURL/delete", (req, res) => {
+  if (!fetchUser(req.cookies["user_id"])) {
+    res.sendStatus(403)
+  }
   delete urlDatabase[req.params.shortURL];
   res.redirect("../../urls");
 });
 
 // Update URL in DB
 app.post("/urls/:shortURL", (req, res) => {
+  if (!fetchUser(req.cookies["user_id"])) {
+    res.sendStatus(403)
+  }
   urlDatabase[req.params.shortURL].longURL = req.body.newURL;
   res.redirect("../../urls")
 });
 
 // Login
 app.post("/login", (req, res) => {
-  for (const user_id in users) {
-    if (users[user_id].email !== req.body.email) {
-      return res.sendStatus(403);
-    } 
-    if (users[user_id].password !== req.body.password) {
+  if (fetchUser(req.body.email)) {
+    if (req.body.password === users[fetchUser(req.body.email)].password) {
       return res.sendStatus(403)
-    } else {
-      res.cookie("user_id", users[user_id].id)
     }
-  }
-  res.redirect("urls")
-})
+  } else {
+    res.cookie("user_id", users[user_id].id)
+    res.cookie("email", req.body.email)
+    res.redirect("urls")
+  }    
+});
+  
 
 // Logout
 app.post("/logout", (req, res) => {
