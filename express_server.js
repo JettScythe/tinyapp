@@ -183,7 +183,7 @@ app.put("/urls", (req, res) => {
 });
 
 // Delete URL from DB
-app.delete("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL", (req, res) => {
   const userId = req.session['user_id'];
   const currentUser = users[userId];
   const shortURL = req.params.shortURL;
