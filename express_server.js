@@ -166,7 +166,7 @@ app.post("/register", (req, res) => {
 });
 
 // Create & add new URL to DB
-app.put("/urls", (req, res) => {
+app.post("/urls", (req, res) => {
   const userId = req.session['user_id'];
   const currentUser = users[userId];
   //if user is logged in:
