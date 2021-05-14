@@ -1,10 +1,12 @@
 const express = require("express");
 const cookieSession = require('cookie-session');
+const methodOverride = require('method-override');
 const { genRandomString, addNewUser, authenticateUser, urlsForUsers, fetchUserByEmail } = require('./helpers');
 const app = express();
 const PORT = 3000; // default port 3000
 
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
@@ -181,7 +183,7 @@ app.post("/urls", (req, res) => {
 });
 
 // Delete URL from DB
-app.post("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL", (req, res) => {
   const userId = req.session['user_id'];
   const currentUser = users[userId];
   const shortURL = req.params.shortURL;
@@ -203,7 +205,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 // Update URL in DB
-app.post("/urls/:shortURL", (req, res) => {
+app.put("/urls/:shortURL", (req, res) => {
   const userId = req.session['user_id'];
   const currentUser = users[userId];
   const shortURL = req.params.shortURL;
