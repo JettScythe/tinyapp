@@ -106,11 +106,11 @@ app.get("/urls/:shortURL", (req, res) => {
   }
   //if user is not logged in:
   if (!currentUser) {
-    res.status(401).send('You need to log in UPDATE THIS');
+    res.status(401).send('<html><meta http-equiv=refresh content=5;URL=/login /><body><h1>You need to login to access this Redirecting..</h1></body></html>');
   }
   //if user is logged it but does not own the URL with the given ID:
   if (!belongsToUser) {
-    res.status(403).send(`You don't own ${shortURL}`);
+    res.status(403).send(`<html><meta http-equiv=refresh content=5;URL=/urls /><body><h1>You don't own ${shortURL}. Redirecting..</h1></body></html>`);
   }
   const templateVars = {
     user: currentUser,
@@ -148,7 +148,7 @@ app.post("/register", (req, res) => {
   const user = fetchUserByEmail(email, users);
   //if email or password are empty:
   if (!email || !password) {
-    res.status(400).send('<html><body><h1>Please supply an email and a password</h1></body></html>');
+    res.status(400).send('<html><meta http-equiv=refresh content=5;URL=/register /><body><h1>Please supply an email and a password.. redirecting</h1></body></html>');
   }
   if (!user) {
     //creates a new user
@@ -159,7 +159,7 @@ app.post("/register", (req, res) => {
     res.redirect("urls");
   } else {
     //if email already exists:
-    res.status(403).send('<html><body><h1>Sorry, the user is already registered</h1></body></html>');
+    res.status(403).send('<html><meta http-equiv=refresh content=5;URL=/register /><body><h1>Sorry, the user is already registered.. redirecting</h1></body></html>');
   }
 });
 
@@ -215,7 +215,7 @@ app.post("/urls/:shortURL", (req, res) => {
   }
   // if user is logged it but does not own the URL for the given ID:
   if (!belongsToUser) {
-    res.status(403).send(`You don't own ${shortURL}`);
+    res.status(403).send(`<html><meta http-equiv=refresh content=5;URL=/urls /><body><h1>You don't own ${shortURL}. Redirecting..</h1></body></html>`);
   }
   urlDatabase[req.params.shortURL].longURL = req.body.newURL;
   //redirects to /urls
