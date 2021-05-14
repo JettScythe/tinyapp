@@ -35,7 +35,7 @@
             <td><a href="/urls/<%= url %>" class="btn btn-outline-primary">Edit</a></td>
             <td>
               <!-- a delete button which makes a POST request to /urls/:id/delete -->
-              <form method="POST" action="/urls/<%= url %>/delete">
+              <form method="POST" action="/urls/<%= url %>?_method=DELETE">
                 <input type ="submit" class="btn btn-outline-danger" value="Delete">
               </form>
             </td>
