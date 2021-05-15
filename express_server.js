@@ -124,16 +124,14 @@ app.get("/urls/:shortURL", (req, res) => {
 
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
   // if URL for the given ID exists:
-  if (longURL) {
-    // Redirect to domain of URL
-    res.redirect(longURL);
-  } else {
+  if (!urlDatabase[req.params.shortURL]) {
     // returns HTML with a relevant error message
     res.status(404).send('<html><meta http-equiv=refresh content=5;URL=/urls /><body><h1>The requested URL does not exist. Redirecting..</h1></body></html>');
+  } else {
+    const longURL = urlDatabase[req.params.shortURL].longURL;
+    res.redirect(longURL);
   }
-  
 });
 
 // Show URLs in JSON format
